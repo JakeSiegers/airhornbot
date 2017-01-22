@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/signal"
@@ -82,9 +83,9 @@ var KNOBBE *SoundCollection = &SoundCollection{
 		"!knobbe",
 	},
 	Sounds: []*Sound{
-		createSound("badgame", 100, 250),
-		createSound("omg", 100, 250),
-		createSound("clense", 100, 250),
+		//createSound("badgame", 100, 250),
+		//createSound("omg", 100, 250),
+		//createSound("clense", 100, 250),
 	},
 }
 
@@ -204,13 +205,13 @@ var WOW *SoundCollection = &SoundCollection{
 }
 
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
-	AIRHORN,
-	KHALED,
-	CENA,
-	ETHAN,
-	COW,
-	BIRTHDAY,
-	WOW,
+	//AIRHORN,
+	//KHALED,
+	//CENA,
+	//ETHAN,
+	//COW,
+	//BIRTHDAY,
+	//WOW,
 	KNOBBE,
 }
 
@@ -685,6 +686,14 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
+func push(original []*Sound, value *Sound) []*Sound {
+	size := len(original);
+	target := make([]*Sound, size+1)
+	copy(target, original)
+	target[len(original)] = value
+	return target
+}
+
 func main() {
 	var (
 		Token      = flag.String("t", "", "Discord Authentication Token")
@@ -698,6 +707,17 @@ func main() {
 
 	if *Owner != "" {
 		OWNER = *Owner
+	}
+
+	log.Info("Reading Sound Directory...")
+	files, _ := ioutil.ReadDir("audio")
+	for _, file := range files {
+		fileName := file.Name()
+		length := len(file.Name())
+		if fileName[length-4:length] != ".dca" {
+			continue
+		}
+		KNOBBE.Sounds = push(KNOBBE.Sounds,createSound(fileName[7:length-4], 100, 250))
 	}
 
 	// Preload all the sounds

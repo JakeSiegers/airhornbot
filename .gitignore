@@ -8,3 +8,6 @@ web
 requests.log
 dist
 node_modules
+pkg
+src
+bin
