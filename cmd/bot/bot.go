@@ -76,6 +76,18 @@ type Sound struct {
 	buffer [][]byte
 }
 
+var KNOBBE *SoundCollection = &SoundCollection{
+	Prefix: "knobbe",
+	Commands: []string{
+		"!knobbe",
+	},
+	Sounds: []*Sound{
+		createSound("badgame", 100, 250),
+		createSound("omg", 100, 250),
+		createSound("clense", 100, 250),
+	},
+}
+
 // Array of all the sounds we have
 var AIRHORN *SoundCollection = &SoundCollection{
 	Prefix: "airhorn",
@@ -199,6 +211,7 @@ var COLLECTIONS []*SoundCollection = []*SoundCollection{
 	COW,
 	BIRTHDAY,
 	WOW,
+	KNOBBE,
 }
 
 // Create a Sound struct
@@ -461,7 +474,7 @@ func onReady(s *discordgo.Session, event *discordgo.Ready) {
 }
 
 func onGuildCreate(s *discordgo.Session, event *discordgo.GuildCreate) {
-	if event.Guild.Unavailable != nil {
+	if event.Guild.Unavailable {
 		return
 	}
 
