@@ -717,7 +717,9 @@ func main() {
 		if fileName[length-4:length] != ".dca" {
 			continue
 		}
-		KNOBBE.Sounds = push(KNOBBE.Sounds,createSound(fileName[7:length-4], 100, 250))
+		cutname := fileName[7:length-4];
+		//log.Info(cutname)
+		KNOBBE.Sounds = push(KNOBBE.Sounds,createSound(cutname, 100, 250))
 	}
 
 	// Preload all the sounds
