@@ -83,135 +83,13 @@ var KNOBBE *SoundCollection = &SoundCollection{
 		"!knobbe",
 	},
 	Sounds: []*Sound{
-		//createSound("badgame", 100, 250),
-		//createSound("omg", 100, 250),
-		//createSound("clense", 100, 250),
-	},
-}
-
-// Array of all the sounds we have
-var AIRHORN *SoundCollection = &SoundCollection{
-	Prefix: "airhorn",
-	Commands: []string{
-		"!airhorn",
-	},
-	Sounds: []*Sound{
-		createSound("default", 1000, 250),
-		createSound("reverb", 800, 250),
-		createSound("spam", 800, 0),
-		createSound("tripletap", 800, 250),
-		createSound("fourtap", 800, 250),
-		createSound("distant", 500, 250),
-		createSound("echo", 500, 250),
-		createSound("clownfull", 250, 250),
-		createSound("clownshort", 250, 250),
-		createSound("clownspam", 250, 0),
-		createSound("highfartlong", 200, 250),
-		createSound("highfartshort", 200, 250),
-		createSound("midshort", 100, 250),
-		createSound("truck", 10, 250),
-	},
-}
-
-var KHALED *SoundCollection = &SoundCollection{
-	Prefix:    "another",
-	ChainWith: AIRHORN,
-	Commands: []string{
-		"!anotha",
-		"!anothaone",
-	},
-	Sounds: []*Sound{
-		createSound("one", 1, 250),
-		createSound("one_classic", 1, 250),
-		createSound("one_echo", 1, 250),
-	},
-}
-
-var CENA *SoundCollection = &SoundCollection{
-	Prefix: "jc",
-	Commands: []string{
-		"!johncena",
-		"!cena",
-	},
-	Sounds: []*Sound{
-		createSound("airhorn", 1, 250),
-		createSound("echo", 1, 250),
-		createSound("full", 1, 250),
-		createSound("jc", 1, 250),
-		createSound("nameis", 1, 250),
-		createSound("spam", 1, 250),
-	},
-}
-
-var ETHAN *SoundCollection = &SoundCollection{
-	Prefix: "ethan",
-	Commands: []string{
-		"!ethan",
-		"!eb",
-		"!ethanbradberry",
-		"!h3h3",
-	},
-	Sounds: []*Sound{
-		createSound("areyou_classic", 100, 250),
-		createSound("areyou_condensed", 100, 250),
-		createSound("areyou_crazy", 100, 250),
-		createSound("areyou_ethan", 100, 250),
-		createSound("classic", 100, 250),
-		createSound("echo", 100, 250),
-		createSound("high", 100, 250),
-		createSound("slowandlow", 100, 250),
-		createSound("cuts", 30, 250),
-		createSound("beat", 30, 250),
-		createSound("sodiepop", 1, 250),
-	},
-}
-
-var COW *SoundCollection = &SoundCollection{
-	Prefix: "cow",
-	Commands: []string{
-		"!stan",
-		"!stanislav",
-	},
-	Sounds: []*Sound{
-		createSound("herd", 10, 250),
-		createSound("moo", 10, 250),
-		createSound("x3", 1, 250),
-	},
-}
-
-var BIRTHDAY *SoundCollection = &SoundCollection{
-	Prefix: "birthday",
-	Commands: []string{
-		"!birthday",
-		"!bday",
-	},
-	Sounds: []*Sound{
-		createSound("horn", 50, 250),
-		createSound("horn3", 30, 250),
-		createSound("sadhorn", 25, 250),
-		createSound("weakhorn", 25, 250),
-	},
-}
-
-var WOW *SoundCollection = &SoundCollection{
-	Prefix: "wow",
-	Commands: []string{
-		"!wowthatscool",
-		"!wtc",
-	},
-	Sounds: []*Sound{
-		createSound("thatscool", 50, 250),
+	//createSound("badgame", 100, 250),
+	//createSound("omg", 100, 250),
+	//createSound("clense", 100, 250),
 	},
 }
 
 var COLLECTIONS []*SoundCollection = []*SoundCollection{
-	//AIRHORN,
-	//KHALED,
-	//CENA,
-	//ETHAN,
-	//COW,
-	//BIRTHDAY,
-	//WOW,
 	KNOBBE,
 }
 
@@ -577,28 +455,6 @@ func utilGetMentioned(s *discordgo.Session, m *discordgo.MessageCreate) *discord
 	return nil
 }
 
-func airhornBomb(cid string, guild *discordgo.Guild, user *discordgo.User, cs string) {
-	count, _ := strconv.Atoi(cs)
-	discord.ChannelMessageSend(cid, ":ok_hand:"+strings.Repeat(":trumpet:", count))
-
-	// Cap it at something
-	if count > 100 {
-		return
-	}
-
-	play := createPlay(user, guild, AIRHORN, nil)
-	vc, err := discord.ChannelVoiceJoin(play.GuildID, play.ChannelID, true, true)
-	if err != nil {
-		return
-	}
-
-	for i := 0; i < count; i++ {
-		AIRHORN.Random().Play(vc)
-	}
-
-	vc.Disconnect()
-}
-
 // Handles bot operator messages, should be refactored (lmao)
 func handleBotControlMessages(s *discordgo.Session, m *discordgo.MessageCreate, parts []string, g *discordgo.Guild) {
 	if scontains(parts[1], "status") {
@@ -611,8 +467,6 @@ func handleBotControlMessages(s *discordgo.Session, m *discordgo.MessageCreate, 
 		} else {
 			displayServerStats(m.ChannelID, g.ID)
 		}
-	} else if scontains(parts[1], "bomb") && len(parts) >= 4 {
-		airhornBomb(m.ChannelID, g, utilGetMentioned(s, m), parts[3])
 	} else if scontains(parts[1], "aps") {
 		s.ChannelMessageSend(m.ChannelID, ":ok_hand: give me a sec m8")
 		go calculateAirhornsPerSecond(m.ChannelID)
@@ -686,13 +540,22 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-func push(original []*Sound, value *Sound) []*Sound {
-	size := len(original);
+func pushSound(original []*Sound, value *Sound) []*Sound {
+	size := len(original)
 	target := make([]*Sound, size+1)
 	copy(target, original)
 	target[len(original)] = value
 	return target
 }
+
+func pushSoundCollection(original []*SoundCollection, value *SoundCollection) []*SoundCollection {
+	size := len(original)
+	target := make([]*SoundCollection, size+1)
+	copy(target, original)
+	target[len(original)] = value
+	return target
+}
+
 
 func main() {
 	var (
@@ -711,15 +574,29 @@ func main() {
 
 	log.Info("Reading Sound Directory...")
 	files, _ := ioutil.ReadDir("audio")
+
 	for _, file := range files {
 		fileName := file.Name()
 		length := len(file.Name())
 		if fileName[length-4:length] != ".dca" {
 			continue
 		}
-		cutname := fileName[7:length-4];
+		cutname := fileName[7 : length-4]
 		//log.Info(cutname)
-		KNOBBE.Sounds = push(KNOBBE.Sounds,createSound(cutname, 100, 250))
+		KNOBBE.Sounds = pushSound(KNOBBE.Sounds, createSound(cutname, 100, 250))
+
+		newSoundCommand := &SoundCollection{
+			Prefix: "knobbe",
+			Commands: []string{
+				"!knobbe "+cutname,
+			},
+			Sounds: []*Sound{
+				createSound(cutname, 100, 250),
+			},
+		}
+
+		COLLECTIONS = pushSoundCollection(COLLECTIONS,newSoundCommand)
+
 	}
 
 	// Preload all the sounds

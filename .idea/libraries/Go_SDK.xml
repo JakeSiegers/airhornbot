@@ -1,10 +1,10 @@
 <component name="libraryTable">
   <library name="Go SDK">
     <CLASSES>
-      <root url="file:///usr/local/Cellar/go/1.7.4_2/libexec/src" />
+      <root url="file://C:/server/programs/Go/src" />
     </CLASSES>
     <SOURCES>
-      <root url="file:///usr/local/Cellar/go/1.7.4_2/libexec/src" />
+      <root url="file://C:/server/programs/Go/src" />
     </SOURCES>
   </library>
 </component>
