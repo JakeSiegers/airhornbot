@@ -524,7 +524,7 @@ func onMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			var sound *Sound
 			if len(parts) > 1 {
 				for _, s := range coll.Sounds {
-					if parts[1] == s.Name {
+					if parts[1] == strings.ToLower(s.Name) {
 						sound = s
 					}
 				}
